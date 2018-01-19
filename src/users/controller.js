@@ -10,9 +10,9 @@ exports.createController = (model = userModel) => {
       try {
         const { email, password, firstName, lastName } = request.body
         const user = await model.create({ email, password, firstName, lastName })
+
         return response.status(201).json(user)
-      }
-      catch (error) { return next(error) }
+      } catch (error) { return next(error) }
     }
   }
 
