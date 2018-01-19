@@ -1,17 +1,20 @@
 const userModel = require('./model')
 
-const local = {}
+const privates = {}
 
 exports.createController = (model = userModel) => {
-  if (local.controller) return local.controller
+  if (privates.controller) return privates.controller
 
-  local.controller = {
-    async create (request, response) {
-      const { email, password, firstName, lastName } = request.params
-      const user = await model.create({ email, password, firstName, lastName })
-      return response.status(201).json(user)
+  privates.controller = {
+    async create (request, response, next) {
+      try {
+        const { email, password, firstName, lastName } = request.body
+        const user = await model.create({ email, password, firstName, lastName })
+        return response.status(201).json(user)
+      }
+      catch (error) { return next(error) }
     }
   }
 
-  return local.controller
+  return privates.controller
 }
